@@ -1,0 +1,8 @@
+@url = https://refactored-space-halibut-g666r6gp7wxcwvjq-8080.app.github.dev/
+GET {{url}}
+
+###
+POST {{url}}
+Content-Type: text/plain
+
+Morango
