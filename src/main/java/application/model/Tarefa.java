@@ -11,5 +11,5 @@ import lombok.Setter;
 public class Tarefa {
     @Id
     private long id;
-    private String descriacao;
+    private String descricao;
 }
