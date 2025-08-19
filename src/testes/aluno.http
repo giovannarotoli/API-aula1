@@ -1,0 +1,27 @@
+@url = https://glorious-robot-vwwwrwx55pp3wj47-8080.app.github.dev/aluno
+
+POST  {{url}}
+Content-Type: application/json
+
+{
+    "id":1,
+    "nome": "Adriano",
+    "idade":21
+}
+
+###
+Get {{url}}
+
+###
+PUT {{url}}/1
+Content-Type: application/json
+
+{
+    "nome": "Giovanna"
+}
+
+###
+DELETE {{url}}/1
+
+###
+GET {{url}}/4

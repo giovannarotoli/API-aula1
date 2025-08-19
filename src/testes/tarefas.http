@@ -21,3 +21,6 @@ Content-Type: application/json
 
 ###
 DELETE {{url}}/1
+
+###
+GET {{url}}/4

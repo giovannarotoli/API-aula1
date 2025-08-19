@@ -1,7 +1,5 @@
 package application.controller;
 
-
-
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,53 +14,53 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import application.model.Tarefa;
-import application.repository.TarefaRepository;;
+import application.model.Aluno;
+import application.repository.AlunoRepository;
 
 @RestController
-@RequestMapping("/tarefas")
-public class TarefaController {
-    @Autowired
-    private  TarefaRepository tarefaRepo;
+@RequestMapping("/aluno")
+public class AlunoController {
+     @Autowired
+    private AlunoRepository alunoRepo;
 
     @PostMapping
-    public Tarefa insert(@RequestBody Tarefa novaTarefa){
-        return tarefaRepo.save(novaTarefa);
+    public Aluno insert(@RequestBody Aluno novoAluno){
+        return alunoRepo.save(novoAluno);
     }
 
-    @GetMapping("/{id}")
-    public Tarefa getOne(@PathVariable long id){
-        Optional<Tarefa> resultado = tarefaRepo.findById(id);
+     @GetMapping("/{id}")
+    public Aluno getOne(@PathVariable long id){
+        Optional<Aluno> resultado = alunoRepo.findById(id);
 
         if (resultado.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tarefa não encontrada");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aluno não encontrado");
         }
-        return new Tarefa();
+        return new Aluno();
     }
 
     @GetMapping
-    public Iterable<Tarefa> getAll() {
-        return tarefaRepo.findAll();
+    public Iterable<Aluno> getAll() {
+        return alunoRepo.findAll();
     }
 
     @PutMapping("/{id}")
-    public Tarefa update(@PathVariable long id, @RequestBody Tarefa novosDados){
-        Optional<Tarefa> resultado = tarefaRepo.findById(id);
+    public Aluno update(@PathVariable long id, @RequestBody Aluno novosDados){
+        Optional<Aluno> resultado = alunoRepo.findById(id);
 
          if (resultado.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tarefa não encontrada");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aluno não encontrado");
         }
-            resultado.get().setDescricao(novosDados.getDescricao());
-            return tarefaRepo.save(resultado.get());
+            resultado.get().setNome(novosDados.getNome());
+            return alunoRepo.save(resultado.get());
         
     }
 
     @DeleteMapping("/{id}")
     public void remove(@PathVariable long id){
-        if (!tarefaRepo.existsById(id)){
+        if (!alunoRepo.existsById(id)){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tarefa não encontrada");
         }
         
-        tarefaRepo.deleteById(id);
+        alunoRepo.deleteById(id);
     }
 }
