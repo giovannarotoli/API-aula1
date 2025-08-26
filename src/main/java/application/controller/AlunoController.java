@@ -14,63 +14,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import application.model.Aluno;
+
 import application.record.AlunoDTO;
 import application.record.AlunoInsertDTO;
-import application.repository.AlunoRepository;
+import application.service.AlunoService;
 
 @RestController
 @RequestMapping("/aluno")
 public class AlunoController {
-     @Autowired
-    private AlunoRepository alunoRepo;
+    @Autowired
+    private AlunoService alunoService;
 
     @PostMapping
     public AlunoDTO insert(@RequestBody AlunoInsertDTO novoAluno){
-        return new AlunoDTO(alunoRepo.save( new Aluno(novoAluno)));
+        return alunoService.insert(novoAluno);
+    }
+
+     @GetMapping
+    public Iterable<AlunoDTO> getAll() {
+        return alunoService.getAll();
     }
  
     @GetMapping("/{id}")
     public AlunoDTO getOne(@PathVariable long id){
-        Optional<Aluno> resultado = alunoRepo.findById(id);
- 
-        if (resultado.isEmpty()){
-            throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "Aluno não encontrado"
-                );
-        }
-        return new AlunoDTO(resultado.get());
-    }
- 
-    @GetMapping
-    public Iterable<AlunoDTO> getAll() {
-        return alunoRepo.findAll().stream().map(AlunoDTO::new).toList();
+        return alunoService.getOne(id);
     }
  
     @PutMapping("/{id}")
-    public AlunoDTO update(@PathVariable long id, @RequestBody AlunoInsertDTO novosDados){
-        Optional<Aluno> resultado = alunoRepo.findById(id);
+    public AlunoDTO update(@PathVariable long id, @RequestBody AlunoInsertDTO  dadosAluno){
+      return alunoService.update(id, dadosAluno);
 
-        if (resultado.isEmpty()){
-            throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "Aluno não encontrado"
-                );
-        }
-
-        resultado.get().setNome(novosDados.nome());
-        resultado.get().setIdade(novosDados.idade());
-        return  new AlunoDTO(alunoRepo.save(resultado.get()));
-
-        
     }
  
     @DeleteMapping("/{id}")
-    public void remove(@PathVariable long id){
-        if(!alunoRepo.existsById(id)) {
-            throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "Aluno não encontrado"
-                );
-        }
-        alunoRepo.deleteById(id);
+    public void delete(@PathVariable long id){
+       alunoService.delete(id);
     }
 }

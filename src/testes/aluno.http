@@ -16,12 +16,12 @@ PUT {{url}}/3
 Content-Type: application/json
 
 {
-    "nome": "Giovanna",
-    "idade": 22
+    "nome": "Anna",
+    "idade": 25
 }
 
 ###
-DELETE {{url}}/5
+DELETE {{url}}/6
 
 ###
-GET {{url}}/4
+GET {{url}}/3
