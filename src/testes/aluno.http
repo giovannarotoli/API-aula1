@@ -1,10 +1,9 @@
-@url = https://glorious-robot-vwwwrwx55pp3wj47-8080.app.github.dev/aluno
+@url = https://fuzzy-space-orbit-xxxxpxj49x5hvjr7-8080.app.github.dev/aluno
 
 POST  {{url}}
 Content-Type: application/json
 
 {
-    "id":1,
     "nome": "Adriano",
     "idade":21
 }
@@ -13,15 +12,16 @@ Content-Type: application/json
 Get {{url}}
 
 ###
-PUT {{url}}/1
+PUT {{url}}/3
 Content-Type: application/json
 
 {
-    "nome": "Giovanna"
+    "nome": "Giovanna",
+    "idade": 22
 }
 
 ###
-DELETE {{url}}/1
+DELETE {{url}}/5
 
 ###
 GET {{url}}/4

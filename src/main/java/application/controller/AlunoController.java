@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import application.model.Aluno;
+import application.record.AlunoDTO;
+import application.record.AlunoInsertDTO;
 import application.repository.AlunoRepository;
 
 @RestController
@@ -24,43 +26,51 @@ public class AlunoController {
     private AlunoRepository alunoRepo;
 
     @PostMapping
-    public Aluno insert(@RequestBody Aluno novoAluno){
-        return alunoRepo.save(novoAluno);
+    public AlunoDTO insert(@RequestBody AlunoInsertDTO novoAluno){
+        return new AlunoDTO(alunoRepo.save( new Aluno(novoAluno)));
     }
-
-     @GetMapping("/{id}")
-    public Aluno getOne(@PathVariable long id){
+ 
+    @GetMapping("/{id}")
+    public AlunoDTO getOne(@PathVariable long id){
+        Optional<Aluno> resultado = alunoRepo.findById(id);
+ 
+        if (resultado.isEmpty()){
+            throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Aluno não encontrado"
+                );
+        }
+        return new AlunoDTO(resultado.get());
+    }
+ 
+    @GetMapping
+    public Iterable<AlunoDTO> getAll() {
+        return alunoRepo.findAll().stream().map(AlunoDTO::new).toList();
+    }
+ 
+    @PutMapping("/{id}")
+    public AlunoDTO update(@PathVariable long id, @RequestBody AlunoInsertDTO novosDados){
         Optional<Aluno> resultado = alunoRepo.findById(id);
 
         if (resultado.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aluno não encontrado");
+            throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Aluno não encontrado"
+                );
         }
-        return new Aluno();
-    }
 
-    @GetMapping
-    public Iterable<Aluno> getAll() {
-        return alunoRepo.findAll();
-    }
+        resultado.get().setNome(novosDados.nome());
+        resultado.get().setIdade(novosDados.idade());
+        return  new AlunoDTO(alunoRepo.save(resultado.get()));
 
-    @PutMapping("/{id}")
-    public Aluno update(@PathVariable long id, @RequestBody Aluno novosDados){
-        Optional<Aluno> resultado = alunoRepo.findById(id);
-
-         if (resultado.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aluno não encontrado");
-        }
-            resultado.get().setNome(novosDados.getNome());
-            return alunoRepo.save(resultado.get());
         
     }
-
+ 
     @DeleteMapping("/{id}")
     public void remove(@PathVariable long id){
-        if (!alunoRepo.existsById(id)){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tarefa não encontrada");
+        if(!alunoRepo.existsById(id)) {
+            throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Aluno não encontrado"
+                );
         }
-        
         alunoRepo.deleteById(id);
     }
 }
